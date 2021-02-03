@@ -1,0 +1,32 @@
+name: CI
+
+on: [push, pull_request]
+
+env:
+  BUILD_CONFIGURATION: Release
+jobs:
+#  Build-Linux:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v2
+  Build-Windows:
+    runs-on: windows-latest
+    env:
+      compiler: msvc
+      QT_VER_MAIN: 5
+      QT_VER: 5.15.2
+      QT_DATE: 202011130602
+      QTDIR: C:\Qt\$(QT_VER)\$(QT_VER_MSVC)_64
+      VULKAN_VER: 1.2.154.1
+      VULKAN_SDK_SHA: b64471f3a720e649c1fae6535ea83b8c642655ebed1485bfdf15bf4d88f746d9
+      VULKAN_SDK: C:\VulkanSDK\$(VULKAN_VER)
+      CACHE_DIR: ./cache
+      UPLOAD_COMMIT_HASH: 7d09e3be30805911226241afbb14f8cdc2eb054e
+      UPLOAD_REPO_FULL_NAME: "RPCS3/rpcs3-binaries-win"
+      POWERSHELL_TELEMETRY_OPTOUT: 1
+      
+    steps:
+    - uses: actions/checkout@v2
+    - uses: microsoft/setup-msbuild@v1
+    - name: Build
+      run: msbuild -m -p:Configuration=Release
